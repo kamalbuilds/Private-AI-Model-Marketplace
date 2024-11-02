@@ -12,8 +12,8 @@ contract ModelNFT is ERC721, ERC721URIStorage, Ownable {
     struct ModelMetadata {
         string name;
         string description;
-        string modelType;      // e.g., "classification", "nlp"
-        string framework;      // e.g., "pytorch", "tensorflow" 
+        string modelType;
+        string framework;
         uint256 price;
         bytes32 encryptedIPFSHash;
         bytes32 sampleDataHash;
@@ -21,8 +21,6 @@ contract ModelNFT is ERC721, ERC721URIStorage, Ownable {
     }
 
     mapping(uint256 => ModelMetadata) public models;
-    mapping(uint256 => mapping(address => bool)) private _accessControl;
-    
     uint256 private _tokenIdCounter;
     
     event ModelMinted(uint256 indexed tokenId, address indexed creator);
@@ -60,23 +58,16 @@ contract ModelNFT is ERC721, ERC721URIStorage, Ownable {
         return tokenId;
     }
 
-    function grantAccess(uint256 tokenId, address user) external {
-        require(_exists(tokenId), "Model does not exist");
-        require(ownerOf(tokenId) == msg.sender, "Not the model owner");
-        _accessControl[tokenId][user] = true;
-        emit AccessGranted(tokenId, user);
+    // Override functions to fix compilation errors
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
     }
 
-    function hasAccess(uint256 tokenId, address user) public view returns (bool) {
-        return _accessControl[tokenId][user] || ownerOf(tokenId) == user;
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721URIStorage) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

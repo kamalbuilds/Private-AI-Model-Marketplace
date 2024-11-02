@@ -7,6 +7,9 @@ Secure marketplace functionality
 Encrypted access key management
 
 
+Added proper key generation using Sapphire's Curve25519 functions
+Fixed the encryption process using proper nonce and symmetric key
+Removed the invalid type conversion
 
 Try running some of the following tasks:
 
