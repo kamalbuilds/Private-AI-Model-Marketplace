@@ -25,6 +25,13 @@ contract ModelMarketplace is ReentrancyGuard {
         nft = ModelNFT(_nftAddress);
     }
 
+    function _generateEncryptionKey() internal view returns (bytes32) {
+        bytes memory randomPad = Sapphire.randomBytes(32, "");
+        (Sapphire.Curve25519PublicKey publicKey, Sapphire.Curve25519SecretKey secretKey) = 
+            Sapphire.generateCurve25519KeyPair(randomPad);
+        return Sapphire.deriveSymmetricKey(publicKey, secretKey);
+    }
+
     function listModel(uint256 modelId, uint256 price) external {
         require(nft.ownerOf(modelId) == msg.sender, "Not the model owner");
         modelPrices[modelId] = price;
@@ -36,18 +43,21 @@ contract ModelMarketplace is ReentrancyGuard {
         require(price > 0, "Model not listed");
         require(msg.value >= price, "Insufficient payment");
         
-        // Generate encrypted key using Sapphire's random number generator
-        bytes memory key = new bytes(32);
-        uint256 random = uint256(Sapphire.randomBytes(32, ""));
-        assembly {
-            mstore(add(key, 32), random)
-        }
+        // Generate encryption key and encrypt it
+        bytes32 symmetricKey = _generateEncryptionKey();
+        bytes32 nonce = bytes32(Sapphire.randomBytes(32, ""));
+        bytes memory encryptedKey = Sapphire.encrypt(
+            symmetricKey,
+            nonce,
+            abi.encodePacked(symmetricKey),
+            ""
+        );
         
         purchases[modelId].push(Purchase({
             buyer: msg.sender,
             modelId: modelId,
             timestamp: block.timestamp,
-            encryptedKey: key
+            encryptedKey: encryptedKey
         }));
 
         // Transfer payment to model owner
