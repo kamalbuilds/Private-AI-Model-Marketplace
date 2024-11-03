@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { modelUploadAtom } from '../../store/modelUpload';
+import { modelUploadAtom } from '@/app/store/modelUpload';
 import Step1Network from '@/components/Step1Network';
-import Step2Details from '@/components/ Step2Details';
+import Step2Details from '@/components/Step2Details';
 import Step3Upload from '@/components/Step3Upload';
 import Step4Confirmation from '@/components/Step4Confirmation';
 

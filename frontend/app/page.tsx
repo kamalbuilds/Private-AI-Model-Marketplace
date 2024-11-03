@@ -1,113 +1,172 @@
-import Image from "next/image";
+"use client";
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { ArrowRight, Lock, ShieldCheck, Coins, Zap, Users } from 'lucide-react'
+import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export default function LandingPage() {
+  const [activeTab, setActiveTab] = useState('seller')
+  const router = useRouter();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+      {/* Hero Section */}
+      <header className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up">
+          Private AI Model Marketplace
+        </h1>
+        <p className="text-xl md:text-2xl mb-8 text-gray-300 animate-fade-in-up animation-delay-200">
+          Securely sell and buy AI models while preserving privacy and intellectual property
         </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+        <div className="flex justify-center gap-4 animate-fade-in-up animation-delay-400">
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700" onClick={() => router.push('/model-upload')}>
+            List Your Model
+          </Button>
+          <Button size="lg" variant="outline" onClick={() => router.push('/marketplace')}>
+            Explore Models
+          </Button>
         </div>
-      </div>
+      </header>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      {/* Key Features */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { icon: Lock, title: "Privacy-Preserving", description: "Keep your model architecture and weights private with Sapphire's encryption" },
+            { icon: Zap, title: "Try Before You Buy", description: "Test models with sample data before making a purchase" },
+            { icon: Coins, title: "Data Monetization", description: "Integrate with Ocean Protocol for seamless data monetization" },
+          ].map((feature, index) => (
+            <Card key={index} className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <feature.icon className="w-12 h-12 mb-4 text-blue-500" />
+                <CardTitle>{feature.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-400">{feature.description}</CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+      {/* How It Works */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-3xl mx-auto">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="seller">For Sellers</TabsTrigger>
+            <TabsTrigger value="buyer">For Buyers</TabsTrigger>
+          </TabsList>
+          <TabsContent value="seller" className="mt-6">
+            <ol className="space-y-4">
+              {[
+                "Encrypt your model using Sapphire's technology",
+                "Set pricing and usage terms",
+                "Deploy your model on the Oasis Sapphire network",
+                "Receive payments securely as buyers use your model"
+              ].map((step, index) => (
+                <li key={index} className="flex items-center gap-4">
+                  <Badge variant="secondary" className="h-8 w-8 rounded-full p-2 font-bold">
+                    {index + 1}
+                  </Badge>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </TabsContent>
+          <TabsContent value="buyer" className="mt-6">
+            <ol className="space-y-4">
+              {[
+                "Browse available models in the marketplace",
+                "Test models with sample data",
+                "Purchase access to desired models",
+                "Use models securely without compromising privacy"
+              ].map((step, index) => (
+                <li key={index} className="flex items-center gap-4">
+                  <Badge variant="secondary" className="h-8 w-8 rounded-full p-2 font-bold">
+                    {index + 1}
+                  </Badge>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </TabsContent>
+        </Tabs>
+      </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+      {/* Trust Indicators */}
+      <section className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-3xl font-bold mb-8">Trusted by Industry Leaders</h2>
+        <div className="flex flex-wrap justify-center gap-8">
+          {['Oasis Labs', 'Ocean Protocol', 'AI Research Institute', 'Tech Innovations Inc.', 'Data Privacy Co.'].map((company, index) => (
+            <Badge key={index} variant="outline" className="text-lg py-2 px-4">
+              {company}
+            </Badge>
+          ))}
+        </div>
+      </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-16 text-center">
+        <Card className="bg-blue-600 text-white">
+          <CardHeader>
+            <CardTitle className="text-3xl">Ready to revolutionize AI model trading?</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-6 text-lg">Join our platform today and experience the future of secure AI model marketplace.</p>
+            <Button size="lg" variant="secondary" className="group">
+              Get Started
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-400 py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="font-bold mb-4">Company</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold mb-4">Resources</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">API Reference</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold mb-4">Legal</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold mb-4">Connect</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-white transition-colors">Twitter</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">GitHub</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+            <p>&copy; 2023 Private AI Model Marketplace. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
 }
